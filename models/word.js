@@ -1,7 +1,8 @@
 var mongoose = require('lib/mongoose');
+var async = require('async');
 
 var schema = new mongoose.Schema({
-    value: {
+    text: {
         type: String,
         required: true,
         unique: true
@@ -10,18 +11,30 @@ var schema = new mongoose.Schema({
 });
 
 schema.statics.increaseCounter = function (text) {
-    var words = text.split(/[, ()!?]/);
-    var len = words.length;
+    var Word = this;
+    // TODO remove duplicate values from array
+    var words = text.split(/[, ()!\?\-+"«»\n']/);
+    async.each(words, function (word) {
+        word = word.toLowerCase().replace(/(\.+)$|(:+)$|[0-9].*|[#]/, '');
+        if (word.length > 3 && !word.match(/(@|http(s)?:)/)) {
+            Word.findOne({text: word}, function (err, adventure) {
+                if (err) throw err;
 
-    for (var i = 0; i < len; i++) {
-        var word = words[i];
-        // TODO write better regexp
-       word =  word.toLowerCase().replace(/(\.+)$|(:+)$|[0-9].*/, '');
-        if (word.length  > 3 && !word.match(/(@|http:)/)) {
-            console.log(words[i]);
+                var dWord = adventure;
+
+                if (dWord == null) {
+                    dWord = new Word({text: word});
+                }
+
+                dWord.counter = dWord.counter + 1 || 1;
+
+                dWord.save(function (err, product, numberAffected) {
+                    if (err) throw err;
+//                    console.log(product.text + " : "+ product.counter);
+                });
+            });
         }
-    }
-    console.log();
-}
+    });
+};
 
 exports.Word = mongoose.model('Word', schema);
