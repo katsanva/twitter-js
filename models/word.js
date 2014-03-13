@@ -12,8 +12,8 @@ var schema = new mongoose.Schema({
 
 schema.statics.increaseCounter = function (text) {
     var Word = this;
-    // TODO remove duplicate values from array
     var words = text.split(/[, ()!\?\-+"«»\n']/);
+
     async.each(words, function (word) {
         word = word.toLowerCase().replace(/(\.+)$|(:+)$|[0-9].*|[#]/, '');
         if (word.length > 3 && !word.match(/(@|http(s)?:)/)) {
@@ -29,7 +29,7 @@ schema.statics.increaseCounter = function (text) {
                 dWord.counter = dWord.counter + 1 || 1;
 
                 dWord.save(function (err, product, numberAffected) {
-                    if (err) throw err;
+                    if (err) console.error(err.message);
 //                    console.log(product.text + " : "+ product.counter);
                 });
             });
