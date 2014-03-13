@@ -3,18 +3,42 @@ html(lang="en")
   head
     title= data
     script(src='http://code.jquery.com/jquery-1.11.0.min.js')
+    script(src='http://www.goat1000.com/jquery.tagcanvas.js?2.2')
     script(type='text/javascript').
       $(document).ready(function(){
         $.ajax({
-            url: '/getData',
-                success: function(data) {
-                    var size = data[0].counter;
-                    $.each(data, function(index, t){
-                    console.log(t);
-                        $('body').append($('<span>', {html: t.text + " (" + t.counter+ ")", style: "font-size: " + 125 * t.counter / size + "px"})).append(" ");
-                    })
-                }
+               url: '/getData',
+               success: function (data) {
+                   var size = data[0].counter;
+                   $.each(data, function (index, t) {
+                       $('#tags').append(
+                           $('<li>').append(
+                               $('<a>', {html: t.text, href: "https://twitter.com/search?q="+ t.text, target: '_blank', "data-weight": 100 * t.counter / size })
+                           )
+                       );
+                   });
+               },
+               complete: function () {
+                   if (!$('#myCanvas').tagcanvas({
+                       textColour: '#000',
+                       outlineColour: '#f0f0f0',
+                       reverse: true,
+                       depth: 0.5,
+                       maxSpeed: 0.1,
+                       weight: true,
+                       shuffleTags: true,
+                        zoom: 0.8,
+                       weightFrom: 'data-weight'
+                   }, 'tags')) {
+                       $('#myCanvasContainer').hide();
+                   }
+               }
+           });
         });
-      });
   body
-    h1 just another twitter crawler
+    #myCanvasContainer(style='margin-top:-500px;position:absolute;width:100%;top:50%;')
+        canvas#myCanvas(width=1000,height=1000,style='margin:0px auto;display:block;')
+            p ololo
+    #tags
+        ul
+

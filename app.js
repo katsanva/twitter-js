@@ -28,7 +28,7 @@ server.on('request', function (req, res) {
                 'Content-Type': 'application/json; charset=utf-8'
             });
 
-            Word.find({}, 'counter text', {limit: 100, sort: {'counter': -1}}).exec(function (err, words) {
+            Word.find({counter: { $gt: 20 }}, 'counter text', {sort: {'counter': -1}}).exec(function (err, words) {
                 if (err) throw err;
 
                 res.write(JSON.stringify(words));
@@ -41,3 +41,5 @@ server.on('request', function (req, res) {
     }
 
 });
+
+
