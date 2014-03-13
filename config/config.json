@@ -1,0 +1,24 @@
+{
+    "port": 3000,
+    "mongoose": {
+        "uri": "",
+        "options": {
+            "server": {
+                "socketOptions": {
+                    "keepAlive": 1
+                }
+            }
+        }
+    },
+    "twitter": {
+        "accessToken": {
+            "public":"",
+            "private":""
+        },
+        "settings": {
+            "consumerKey": "",
+            "consumerSecret": "",
+            "callback": "oob"
+        }
+    }
+}
