@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    title= data
+    script(src='http://code.jquery.com/jquery-1.11.0.min.js')
+    script(type='text/javascript').
+      $(document).ready(function(){
+        $.ajax({
+            url: '/getData',
+                success: function(data) {
+                    var size = data[0].counter;
+                    $.each(data, function(index, t){
+                    console.log(t);
+                        $('body').append($('<span>', {html: t.text + " (" + t.counter+ ")", style: "font-size: " + 125 * t.counter / size + "px"})).append(" ");
+                    })
+                }
+        });
+      });
+  body
+    h1 just another twitter crawler

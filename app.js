@@ -1,5 +1,7 @@
 var config = require('config');
 var mongoose = require('lib/mongoose');
+var url = require('url');
+var jade = require('jade');
 require('lib/engine')();
 var http = require('http');
 var Word = require('models/word').Word;
@@ -9,14 +11,33 @@ var server = http.createServer().listen(config.get("port"), function () {
 });
 
 server.on('request', function (req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'application/json; charset=utf-8'
-    });
+    var urlParsed = url.parse(req.url);
 
-    Word.find({}, 'counter text', {limit: 10, sort: {'counter': -1}}).exec(function (err, words) {
-        if (err) throw err;
+    switch (urlParsed.pathname) {
+        case '/':
+            res.writeHead(200, {
+                'Content-Type': 'text/html; charset=utf-8'
+            });
 
-        res.write(JSON.stringify(words));
-        res.end();
-    });
+            res.write(jade.renderFile('template.jade'));
+            res.end();
+
+            break;
+        case '/getData':
+            res.writeHead(200, {
+                'Content-Type': 'application/json; charset=utf-8'
+            });
+
+            Word.find({}, 'counter text', {limit: 100, sort: {'counter': -1}}).exec(function (err, words) {
+                if (err) throw err;
+
+                res.write(JSON.stringify(words));
+                res.end();
+            });
+            break;
+        default:
+            res.statusCode = 404;
+            res.end("Not found");
+    }
+
 });
