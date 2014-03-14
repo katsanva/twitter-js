@@ -1,11 +1,19 @@
-var config = require('config');
-var mongoose = require('lib/mongoose');
-var url = require('url');
-var jade = require('jade');
-var winston = require('lib/winston')(module);
-require('lib/engine')(require('lib/twitterConnector'), require('lib/mongoResource'));
-var http = require('http');
-var Word = require('models/word').Word;
+var config = require('config'),
+    mongoose = require('lib/mongoose'),
+    url = require('url'),
+    jade = require('jade'),
+    winston = require('lib/winston')(module),
+    connector = require('lib/twitterConnector'),
+    storage = require('lib/mongoResource'),
+    http = require('http'),
+    Word = require('models/word').Word,
+    engine = require('lib/engine');
+var data = new storage();
+var source = new connector();
+
+source.start('#doge');
+data.start();
+engine(source, data);
 
 var server = http.createServer().listen(config.get("port"), function () {
     winston.log("info", "Server has started on ");
@@ -30,9 +38,9 @@ server.on('request', function (req, res) {
                 'Content-Type': 'application/json; charset=utf-8'
             });
 
-            Word.findOne({text: {$ne: "россия"}}, 'counter text', {sort: {'counter': -1}}).exec(function (err, word) {
+            Word.findOne({text: {$ne: "doge"}, query: "#doge"}, 'counter text', {sort: {'counter': -1}}).exec(function (err, word) {
                 if (err) throw err;
-                Word.find({counter: { $gte: word.counter / 10 }, text: {$ne: "россия"}}, 'counter text', {sort: {'counter': -1}}).exec(function (err, words) {
+                Word.find({counter: { $gte: word.counter / 10 }, text: {$ne: "doge"}, query: "#doge"}, 'counter text', {sort: {'counter': -1}}).exec(function (err, words) {
                     if (err) throw err;
 
                     res.write(JSON.stringify(words));
@@ -50,5 +58,3 @@ server.on('request', function (req, res) {
     }
 
 });
-
-

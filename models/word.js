@@ -6,6 +6,10 @@ var schema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    'query': {
+        type: String,
+        required: true
+    },
     counter: Number
 });
 
