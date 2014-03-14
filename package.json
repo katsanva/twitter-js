@@ -14,5 +14,8 @@
         "async": "*",
         "jade": "*",
         "winston": "*"
+    },
+    "devDependencies": {
+        "mocha":"*"
     }
 }
