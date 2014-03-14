@@ -1,5 +1,6 @@
 var mongoose = require('lib/mongoose');
 var async = require('async');
+var winston = require('lib/winston')(module);
 
 var schema = new mongoose.Schema({
     text: {
@@ -12,7 +13,7 @@ var schema = new mongoose.Schema({
 
 schema.statics.increaseCounter = function (text) {
     var Word = this;
-    var words = text.split(/[, ()!\?\-+"«»\n']/);
+    var words = text.split(/[, ()!\?\-+"«»\n…']/);
 
     async.each(words, function (word) {
         word = word.toLowerCase().replace(/(\.+)$|(:+)$|[0-9].*|[#]/, '');
@@ -29,7 +30,7 @@ schema.statics.increaseCounter = function (text) {
                 dWord.counter = dWord.counter + 1 || 1;
 
                 dWord.save(function (err, product, numberAffected) {
-                    if (err) console.error(err.message);
+                    if (err) winston.error(err.message);
 //                    console.log(product.text + " : "+ product.counter);
                 });
             });
