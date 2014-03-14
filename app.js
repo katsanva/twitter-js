@@ -3,7 +3,7 @@ var mongoose = require('lib/mongoose');
 var url = require('url');
 var jade = require('jade');
 var winston = require('lib/winston')(module);
-require('lib/engine')();
+require('lib/engine')(require('lib/twitterConnector'), require('lib/mongoResource'));
 var http = require('http');
 var Word = require('models/word').Word;
 
