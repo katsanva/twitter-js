@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/katsanva/twitter-js.png?branch=dev)](https://travis-ci.org/katsanva/twitter-js)
