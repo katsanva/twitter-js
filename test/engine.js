@@ -1,5 +1,5 @@
 var EventEmitter = require('events').EventEmitter;
-var engine = require('lib/engine');
+var engine = require('../lib/engine');
 var assert = require('chai').assert;
 
 describe('engine', function () {

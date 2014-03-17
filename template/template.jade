@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+  head
+    title= data
+    script(src='/bower_components/jquery/jquery.min.js')
+    script(src='/bower_components/jquery/jquery-migrate.min.js')
+    script(src='/bower_components/socket.io-client/dist/socket.io.min.js')
+    script(src='/bower_components/tagcanvas/index.js')
+    script(src='/client.js')
+  body
+    #myCanvasContainer(style='margin-top:-500px;position:absolute;width:100%;top:50%;')
+        canvas#myCanvas(width=1000,height=1000,style='margin:0px auto;display:block;')
+            p template text
+    #tags
+        ul
+

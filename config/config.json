@@ -12,13 +12,15 @@
     },
     "twitter": {
         "accessToken": {
-            "public":"",
-            "private":""
+            "public": "",
+            "private": ""
         },
         "settings": {
             "consumerKey": "",
             "consumerSecret": "",
             "callback": "oob"
         }
-    }
+    },
+    "limit": 15,
+    "query": "doge"
 }
