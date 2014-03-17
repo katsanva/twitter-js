@@ -3,7 +3,8 @@
     "version": "0.0.5",
     "private": true,
     "scripts": {
-        "start": "node app.js"
+        "start": "node app.js",
+        "test": "(set NODE_PATH=.) && mocha"
     },
     "dependencies": {
         "node-twitter-api": "*",
@@ -13,7 +14,8 @@
         "mongoose": "*",
         "async": "*",
         "jade": "*",
-        "winston": "*"
+        "winston": "*",
+        "socket.io": "*"
     },
     "devDependencies": {
         "chai": "*",
