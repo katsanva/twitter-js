@@ -9,8 +9,6 @@
     "dependencies": {
         "node-twitter-api": "*",
         "nconf": "*",
-        "mongodb": "*",
-        "connect-mongo": "*",
         "mongoose": "*",
         "async": "*",
         "jade": "*",

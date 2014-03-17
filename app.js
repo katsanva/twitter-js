@@ -3,8 +3,9 @@ var config = require('config'),
     mongoose = require('lib/mongoose'),
     url = require('url'),
     winston = require('lib/winston')(module),
-    connector = require('lib/twitterConnector'),
-    storage = require('lib/mongoResource'),
+    Connector = require('lib/twitterConnector'),
+    EventEmitter = require("events").EventEmitter,
+    Storage = require('lib/mongoResource'),
     http = require('http'),
     path = require('path'),
     Word = require('models/word').Word,
@@ -21,9 +22,8 @@ app.use(express.cookieParser());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-var data = new storage();
-var source = new connector();
-var io = require('socket.io').listen(8080);
+var data = new Storage();
+var source = new Connector();
 
 source.start('#doge');
 data.start();
@@ -32,67 +32,38 @@ engine(source, data);
 var server = http.createServer(app).listen(config.get("port"), function () {
     winston.log("info", "Server has started on ");
 });
+var io = require('socket.io').listen(server);
 
-app.get('/', function(req, res, next) {
+
+app.get('/', function (req, res, next) {
     res.render('template');
 });
 
-app.get('/getData', function(req, res, next){
-    Word.findOne({text: {$ne: "doge"}, query: "#doge"}, 'counter text', {sort: {'counter': -1}}).exec(function (err, word) {
-        if (err) throw err;
-        Word.find({counter: { $gte: word.counter / 10 }, text: {$ne: "doge"}, query: "#doge"}, 'counter text', {sort: {'counter': -1}}).exec(function (err, words) {
-            if (err) throw err;
+app.get('/getData', function (req, res, next) {
+    var ee = new EventEmitter();
 
-            res.write(JSON.stringify(words));
-            res.end();
-        });
-
+    ee.on('loadText', function (data) {
+        res.write(data);
+        res.end();
     });
+
+    data.emit('get', ee);
+
 });
 
-/*server.on('request', function (req, res) {
-    winston.log('info', "Request: " + req.method + ": " + req.headers.host + req.url);
-    var urlParsed = url.parse(req.url);
-
-    switch (urlParsed.pathname) {
-        case '/':
-            res.writeHead(200, {
-                'Content-Type': 'text/html; charset=utf-8'
-            });
-
-            res.write(jade.renderFile('template.jade'));
-            res.end();
-
-            break;
-        case '/getData':
-            res.writeHead(200, {
-                'Content-Type': 'application/json; charset=utf-8'
-            });
-
-            Word.findOne({text: {$ne: "doge"}, query: "#doge"}, 'counter text', {sort: {'counter': -1}}).exec(function (err, word) {
-                if (err) throw err;
-                Word.find({counter: { $gte: word.counter / 10 }, text: {$ne: "doge"}, query: "#doge"}, 'counter text', {sort: {'counter': -1}}).exec(function (err, words) {
-                    if (err) throw err;
-
-                    res.write(JSON.stringify(words));
-                    res.end();
-                });
-
-            });
-
-
-            break;
-        default:
-            winston.log('error', "Not found: " + req.method + ": " + req.headers.host + req.url);
-            res.statusCode = 404;
-            res.end("Not found");
-    }
-
-});*/
 io.set('logger', winston);
 io.sockets.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
+
+    data.emit('get', socket);
+
+    socket.on('getData', function () {
+        var ee = new EventEmitter();
+
+        ee.on('loadText', function (data) {
+            socket.emit('update', data);
+        });
+
+        data.emit('get', ee);
     });
 });
+app.set('io', io);
