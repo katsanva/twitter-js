@@ -16,6 +16,7 @@
         "winston": "*"
     },
     "devDependencies": {
+        "chai": "*",
         "mocha":"*"
     }
 }
