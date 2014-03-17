@@ -1,13 +1,12 @@
-var config = require('config'),
+var config = require('./config'),
     express = require('express'),
-    winston = require('lib/winston')(module),
-    Connector = require('lib/twitterConnector'),
+    winston = require('./lib/winston')(module),
+    Connector = require('./lib/twitterConnector'),
     EventEmitter = require("events").EventEmitter,
-    DataStorage = require('lib/mongoResource'),
+    DataStorage = require('./lib/mongoResource'),
     http = require('http'),
     path = require('path'),
-    Word = require('models/word').Word,
-    engine = require('lib/engine');
+    engine = require('./lib/engine');
 var app = express();
 
 app.engine('jade', require('jade').__express);
