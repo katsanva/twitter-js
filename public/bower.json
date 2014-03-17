@@ -1,0 +1,27 @@
+{
+  "name": "twitter-js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/katsanva/twitter-js",
+  "authors": [
+    "katsanva <this.is.ftm@gmail.com>"
+  ],
+  "moduleType": [
+    "amd",
+    "node"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+    "dependencies": {
+        "jquery":"components/jquery",
+        "tagcanvas":"http://www.goat1000.com/jquery.tagcanvas.min.js",
+        "socket.io-client": "*"
+    },
+    "directory": "public/bower_components"
+}
