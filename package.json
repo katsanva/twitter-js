@@ -13,7 +13,8 @@
         "async": "*",
         "jade": "*",
         "winston": "*",
-        "socket.io": "*"
+        "socket.io": "*",
+        "daemonize2": "*"
     },
     "devDependencies": {
         "chai": "*",
