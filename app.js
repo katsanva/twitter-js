@@ -1,11 +1,9 @@
 var config = require('config'),
     express = require('express'),
-    mongoose = require('lib/mongoose'),
-    url = require('url'),
     winston = require('lib/winston')(module),
     Connector = require('lib/twitterConnector'),
     EventEmitter = require("events").EventEmitter,
-    Storage = require('lib/mongoResource'),
+    DataStorage = require('lib/mongoResource'),
     http = require('http'),
     path = require('path'),
     Word = require('models/word').Word,
@@ -22,48 +20,27 @@ app.use(express.cookieParser());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-var data = new Storage();
+var data = new DataStorage();
 var source = new Connector();
 
-source.start('#doge');
-data.start();
+source.start(config.get('query'));
+data.start(config.get('query'), app);
 engine(source, data);
 
 var server = http.createServer(app).listen(config.get("port"), function () {
     winston.log("info", "Server has started on ");
 });
-var io = require('socket.io').listen(server);
 
+var io = require('socket.io').listen(server);
 
 app.get('/', function (req, res, next) {
     res.render('template');
 });
 
-app.get('/getData', function (req, res, next) {
-    var ee = new EventEmitter();
-
-    ee.on('loadText', function (data) {
-        res.write(data);
-        res.end();
-    });
-
-    data.emit('get', ee);
-
-});
-
 io.set('logger', winston);
+
 io.sockets.on('connection', function (socket) {
-
-    data.emit('get', socket);
-
-    socket.on('getData', function () {
-        var ee = new EventEmitter();
-
-        ee.on('loadText', function (data) {
-            socket.emit('update', data);
-        });
-
-        data.emit('get', ee);
-    });
+    data.emit('get', socket, 'create');
 });
+
 app.set('io', io);
