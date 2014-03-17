@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "node app.js",
-        "test": "(export NODE_PATH=.) && mocha"
+        "test": "mocha"
     },
     "dependencies": {
         "node-twitter-api": "*",
