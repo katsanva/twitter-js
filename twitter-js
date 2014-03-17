@@ -1,3 +1,44 @@
 #!/bin/bash
+#
+# description: twitter-js app
+#
+# Get function from functions library
+. /etc/init.d/functions
+# Start the service twitter-js
+start() {
+        initlog -c "echo -n Starting twitter-js: "
+        node ctrl.js &
+        ### Create the lock file ###
+        touch /var/run/twitter-js.pid
+        success $"twitter-js startup"
+        echo
+}
+# Restart the service FOO
+stop() {
+        initlog -c "echo -n Stopping twitter-js: "
+        killproc twitter-js
+        ### Now, delete the lock file ###
+        rm -f /var/run/twitter-js.pid
+        echo
+}
+### main logic ###
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status twitter-js
+        ;;
+  restart|reload|condrestart)
+        stop
+        start
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        exit 1
+esac
+exit 0
 
-/usr/bin/node ctrl.js $1
