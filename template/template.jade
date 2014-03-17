@@ -1,0 +1,54 @@
+doctype html
+html(lang="en")
+  head
+    title= data
+    script(src='/bower_components/jquery/jquery.min.js')
+    script(src='/bower_components/jquery/jquery-migrate.min.js')
+    script(src='/bower_components/socket.io-client/dist/socket.io.min.js')
+    script(src='/bower_components/tagcanvas/index.js')
+    script(type='text/javascript').
+
+          var socket = io.connect('http://localhost:8080');
+          socket.on('news', function (data) {
+            console.log(data);
+            socket.emit('my other event', { my: 'data' });
+          });
+
+          $(document).ready(function(){
+            $.ajax({
+                   url: '/getData',
+                    dataType: 'json',
+                   success: function (data) {
+                       var size = data[0].counter;
+                       $.each(data, function (index, t) {
+                           $('#tags').append(
+                               $('<li>').append(
+                                   $('<a>', {html: t.text, href: "https://twitter.com/search?q="+ t.text, target: '_blank', "data-weight": 100 * t.counter / size })
+                               )
+                           );
+                       });
+                   },
+                   complete: function () {
+                       if (!$('#myCanvas').tagcanvas({
+                           textColour: '#000',
+                           outlineColour: '#f0f0f0',
+                           reverse: true,
+                           depth: 0.5,
+                           maxSpeed: 0.1,
+                           weight: true,
+                           shuffleTags: true,
+                            zoom: 0.8,
+                           weightFrom: 'data-weight'
+                       }, 'tags')) {
+                           $('#myCanvasContainer').hide();
+                       }
+                   }
+               });
+            });
+  body
+    #myCanvasContainer(style='margin-top:-500px;position:absolute;width:100%;top:50%;')
+        canvas#myCanvas(width=1000,height=1000,style='margin:0px auto;display:block;')
+            p ololo
+    #tags
+        ul
+
