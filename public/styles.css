@@ -1,0 +1,34 @@
+body {
+    margin: 0;
+}
+
+#canvasContainer {
+
+}
+
+#canvas {
+    margin: 0px auto;
+    display: block;
+}
+
+#trends {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#trends li {
+    list-style: none;
+    list-style: none;
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+    float: left;
+    background-color: rgba(184, 189, 192, 0.18);
+    cursor: pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}

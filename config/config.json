@@ -1,7 +1,7 @@
 {
-    "port": 3000,
+    "port": 5000,
     "mongoose": {
-        "uri": "",
+        "uri": "mongodb://localhost/twitter",
         "options": {
             "server": {
                 "socketOptions": {
@@ -12,15 +12,15 @@
     },
     "twitter": {
         "accessToken": {
-            "public": "",
-            "private": ""
+            "public": "108644050-RPcFHlXAImCUW0xcS3q3cMGqo9esiyucFbg5i20R",
+            "private": "xWsKjB39wLJjcTcVNj3sYuueb2V0e7QA43ZhlvKnt4eN5"
         },
         "settings": {
-            "consumerKey": "",
-            "consumerSecret": "",
+            "consumerKey": "MAWD5acVnb4rft2hfkgPA",
+            "consumerSecret": "zBh7Jc2neZ8HWQwEtz1vgdyfZVYXHSAnys2baxMSqc",
             "callback": "oob"
         }
     },
     "limit": 15,
-    "query": "doge"
+    "query": "россия"
 }

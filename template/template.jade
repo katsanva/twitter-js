@@ -7,10 +7,12 @@ html(lang="en")
     script(src='/bower_components/socket.io-client/dist/socket.io.min.js')
     script(src='/bower_components/tagcanvas/index.js')
     script(src='/client.js')
+    link(href="/styles.css",rel="stylesheet",type="text/css")
   body
-    #myCanvasContainer(style='margin-top:-500px;position:absolute;width:100%;top:50%;')
-        canvas#myCanvas(width=1000,height=1000,style='margin:0px auto;display:block;')
+    #canvasContainer
+        canvas#canvas(width=10,height=10)
             p template text
     #tags
         ul
+    ul#trends
 
