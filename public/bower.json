@@ -18,10 +18,10 @@
     "test",
     "tests"
   ],
-    "dependencies": {
-        "jquery":"components/jquery",
-        "tagcanvas":"http://www.goat1000.com/jquery.tagcanvas.min.js",
-        "socket.io-client": "*"
-    },
-    "directory": "public/bower_components"
+  "dependencies": {
+    "jquery": "components/jquery",
+    "tagcanvas": "http://www.goat1000.com/jquery.tagcanvas.min.js",
+    "socket.io-client": "*"
+  },
+  "directory": "public/bower_components"
 }
